@@ -1,0 +1,44 @@
+<div [@routerTransition]>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-12">
+
+            <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+                <a class="navbar-brand" href="#">Projects</a>
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" type="text" placeholder="Search">
+                    <select class="nav-item nav-link active" [(ngModel)]="actionTerm" [ngModelOptions]="{standalone: true}" href="#" style="border-radius: 3px;border-color: lightgray;color: grey;">
+                        <option value="All">All</option>
+                        <option value="Wordpress">WordPress</option>
+                        <option value="Letsone">Letsone</option>
+                        <option value="Typescript">TypeScript</option>
+                        <option value="Ionic 2">Ionic</option>
+                        <option value="Android">Android</option>
+                        <option value="Java">Java</option>
+                    </select>
+                </form>
+            </nav>
+        </div>
+        <!-- Card Projects -->
+        <div *ngFor="let project of projects | async | term:searchTerm | action:actionTerm" class="col-md-4 col-md-offset-3 col-sm-1">
+            <div class="card">
+                <div class="card-image">
+                    <img class="" [src]="project.Img">
+                </div>
+
+                <div class="card-content">
+                    <h4>{{project.Title}}</h4>
+                    <p>{{project.Subtitle}} </p>
+                </div>
+
+                <div  class="card-action">
+                    <a *ngFor="let action of project.Action"  target="new_blank">{{action}}</a>
+                    <button (click)="viewproject(project.$key)" type="button " class="btn btn-sm btn-primary pull-right">VIEW PROJECT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>

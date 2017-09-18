@@ -1,0 +1,20 @@
+<div class="card-block">
+    <ul  class="timeline">
+
+        <li *ngFor="let job of timeline | async"  [ngClass]="job.Inverted" >
+            <div class="timeline-badge"><i class="fa fa-check"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <img [src]="job.Img" class="img-responsive" alt="">
+                    <p><small class="text-muted"><i class="fa fa-clock-o"></i>{{job.DateDuration}}</small>
+                    </p>
+                </div>
+                <div class="timeline-body">
+                    <p>{{job.Description}}</p>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+</div>

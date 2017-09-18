@@ -1,0 +1,41 @@
+<div class="pos-f-t fixed-top header">
+    <nav class="navbar navbar-inverse bg-inverse navbar-toggleable-md">
+        <button class="navbar-toggler navbar-toggler-right" (click)="toggleSidebar()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="javascript:void(0)" style="font-size:18px;">CV & Interactive Portfolio</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto mt-2 mt-md-0">
+                <li *ngIf="(auth.user | async)" class="nav-item dropdown" ngbDropdown>
+                    <!-- <div class="dropdown"> -->
+                    <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+                        <i class="fa fa-envelope"></i> {{(UnreadMessages | async)?.length}} <b class="caret"></b><span class="sr-only">(current)</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right messages">
+                        <li *ngFor="let message of Messages | async" class="media">
+                            <img class="d-flex align-self-center mr-3" src="https://www.estimize.com/assets/icons/icon-message-f955fd79a762ccbe286cdeba9dac12ff.png" alt="Generic placeholder image">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">{{message.Name}}</h5><i *ngIf="message.MessageRead" class="fa fa-envelope-o" style="float: right; margin-top: -20px;" aria-hidden="true"></i><i *ngIf="!message.MessageRead" class="fa fa-envelope" style="float: right; margin-top: -25px;" aria-hidden="true"></i>
+                                <p class="small text-muted"><i class="fa fa-clock-o"></i> {{transform(message.Timestamp)}} ago</p>
+                                <p class="last">{{message.Message}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown" ngbDropdown>
+                    <a *ngIf="!(auth.user | async)" href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                        <i  class="fa fa-user"></i> Guest<b class="caret"></b>
+                    </a>
+                    <a *ngIf="(auth.user | async)" href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                        <i  class="fa fa-user"></i> Admin<b class="caret"></b>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" *ngIf="(auth.user | async)"  [routerLink]="['/admin']"><i class="fa fa-fw fa fa-lock"></i>Admin Dash</a>
+                        <a class="dropdown-item" *ngIf="!(auth.user | async)" [routerLink]="['/login']" ><i class="fa fa-fw fa-power-off"></i>Log In</a>
+                        <a class="dropdown-item" *ngIf="(auth.user | async)"  (click)="Logout()" ><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,145 @@
+<div [@routerTransition]>
+    <div *ngIf="!iseditingProfile && !iseditingProject && !isviewingInbox">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-image">
+                    <img class="" src="/assets/images/slider3.jpg">
+                    <span class="card-title">Admin Dashboard</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xl-3 col-lg-6" (click)="editProfile()"  >
+            <app-stat  [bgClass]="'card-primary'" [icon]="'fa-user'"  [label]="'Edit Profile'" ></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <app-stat [bgClass]="'card-success'" [icon]="'fa-suitcase'"  [label]="'Manage Portfolio'" ></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6" (click)="viewInbox()">
+            <app-stat [bgClass]="'card-danger'" [icon]="'fa-comments'"  [label]="'View Inbox'" [count]="(UnreadMessages | async)?.length"></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <app-stat [bgClass]="'card-primary'" [icon]="'fa-plus'" [label]="'Add New Project'" ></app-stat>
+        </div>
+    </div>
+    <hr />
+    </div>
+<button *ngIf="iseditingProfile" (click)="editProfile()" type="button" class="btn btn-primary pull-left">Return to Admin</button>
+    <button *ngIf="isviewingInbox" (click)="viewInbox()" type="button" class="btn btn-primary pull-left">Return to Admin</button>
+    <button *ngIf="iseditingProject" type="button" class="btn btn-primary pull-left">Return to Admin</button>
+<div class="container">
+    <div *ngIf="iseditingProject" class="row">
+        <div class="col-xl-12">
+
+
+            <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="#">Projects</a>
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" type="text" placeholder="Search">
+                </form>
+                <div class="collapse navbar-collapse">
+                    <div class="navbar-nav">
+                        <select class="nav-item nav-link active" [(ngModel)]="actionTerm" [ngModelOptions]="{standalone: true}" href="#" style="border-radius: 3px;border-color: grey;">
+                            <option value="All">All</option>
+                            <option value="Wordpress">WordPress</option>
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="Letsone">Letsone</option>
+                        </select>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Card Projects -->
+        <div *ngFor="let project of projects | async" class="col-md-4 col-md-offset-3 col-sm-1">
+            <div class="card">
+                <div class="card-image">
+                    <img class="" [src]="project.Img">
+                </div>
+
+                <div class="card-content">
+                    <h4>{{project.Title}}</h4>
+                    <p>{{project.Subtitle}} </p>
+                </div>
+
+                <div  class="card-action">
+                    <a *ngFor="let action of project.Action"  target="new_blank">{{action}}</a>
+                    <button (click)="viewproject(project.$key)" type="button " class="btn btn-sm btn-primary pull-right">VIEW PROJECT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="iseditingProfile" class="row">
+
+    <div class="col-lg-8" style="margin-left: auto; margin-right: auto;">
+
+        <div class="profile-userpic">
+            <img [src]="(profile | async)?.Img" class="img-responsive" alt="" >
+        </div>
+        <h4 style="margin-left:37% !important">Update Profile</h4>
+
+        <form role="form">
+
+            <div class="form-group has-primary">
+                <label class="form-control-label">Full Name</label>
+                <input [(ngModel)]="FullName" [ngModelOptions]="{standalone: true}" type="text" class="form-control" id="inputSuccess">
+            </div>
+
+            <div class="form-group has-primary">
+                <label class="form-control-label">Profession</label>
+                <input [(ngModel)]="Profession" [ngModelOptions]="{standalone: true}" type="text" class="form-control " id="inputWarning">
+            </div>
+
+            <div class="form-group has-primary">
+                <label class="form-control-label">Skills</label>
+                <div *ngFor="let skill of Skills" class="col-md-4">
+                    <input [(ngModel)]="skill.value" [ngModelOptions]="{standalone: true}" type="text" class="form-control">
+            </div>
+
+            </div>
+
+            <button (click)="updateProfile()" type="button" class="btn btn-primary">Submit Amendments</button>
+
+        </form>
+    </div>
+    </div>
+</div>
+    <div *ngIf="isviewingInbox" class="tab-content">
+        <div class="tab-pane active" id="inbox">
+
+            <div class="container">
+                <div class="content-container clearfix">
+                    <div class="col-md-12">
+                        <h1 class="content-title">Inbox</h1>
+
+                        <input [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}" type="search" placeholder="Search Name" class="form-control mail-search" />
+
+                        <ul class="mail-list">
+                            <li *ngFor="let message of Messages | async | search: searchTerm">
+                                <a>
+                                    <span class="mail-sender">Name : {{message.Name}}</span>
+                                    <span class="mail-subject">Email Address : {{message.Email}}</span>
+                                    <span *ngIf="!message.Expanded" class="mail-message-preview">Message : {{message.Message | cut:true:25:' ...'}}</span>
+                                    <span *ngIf="message.Expanded" class="mail-message-preview" >Message : {{message.Message}}</span>
+                                    <button *ngIf="!message.Expanded"(click)="message.Expanded = true" type="button" class="btn btn-sm btn-primary" style="margin-top: 10px;">expand</button>
+                                    <button *ngIf="message.Expanded" (click)="message.Expanded = false" type="button" class="btn btn-sm btn-primary" style="margin-top: 10px;">hide</button>
+                                    <button *ngIf="!message.MessageRead" (click)="markRead(message.$key)" type="button" class="btn btn-sm btn-success" style="margin-top: 10px;">mark as read</button>
+                                    <button *ngIf="message.MessageRead" (click)="markUnread(message.$key)" type="button" class="btn btn-sm btn-warning" style="margin-top: 10px;">mark as unread</button>
+                                    <button (click)="reply(message)" type="button" class="btn btn-sm btn-danger" style="margin-top: 10px;">reply</button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

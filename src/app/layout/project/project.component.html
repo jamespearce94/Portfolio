@@ -1,0 +1,100 @@
+<div class="row">
+    <div >
+    </div>
+    <div class="col-xl-12">
+        <h2 class="page-header">
+        </h2>
+        <ol *ngIf="!liveview" class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="fa fa-suitcase"></i> <a href="Javascript:void(0)" [routerLink]="['/portfolio']">Portfolio</a>
+            </li>
+            <li class="breadcrumb-item active"><i class="fa fa-arrow-right"></i> {{(project | async)?.Title}}</li>
+        </ol>
+        <ol *ngIf="liveview" class="breadcrumb">
+            <li class="breadcrumb-item">
+                <i class="fa fa-suitcase"></i> <a href="Javascript:void(0)" [routerLink]="['/portfolio/']">Porfolio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <i class="fa fa-suitcase"></i> <a href="Javascript:void(0)" (click)="togglelive()">{{(project | async)?.Title}}</a>
+            </li>
+            <li class="breadcrumb-item active"><i class="fa fa-arrow-right" ></i>Live View </li>
+        </ol>
+    </div>
+</div>
+
+<div *ngIf="!liveview" class="current-profile" style="margin-bottom: 15px;">
+    <div class="user-bg" [style.background-image]="'url(' + (project  | async)?.HeaderProject + ')'" style="background-repeat: no-repeat;"></div>
+    <!--<div class="profile-image" [ngStyle]="{ 'background-image': 'url(' + project.HeaderProject + ')'}">-->
+    <div class="user-pic" [style.background-image]="'url(' + (project  | async)?.LogoProject + ')'" style="background-repeat: no-repeat;"></div>
+    <div class="user-details">
+        <h4 class="user-name">{{(project| async)?.Title }}<i></i></h4>
+        <button *ngIf="(project | async)?.Liveview"  class="description" style="margin-top: 20px;" (click)="togglelive()" type="button " class="btn btn-sm btn-primary">LIVE VIEW</button>
+        <br>
+    </div>
+
+</div>
+<div  *ngIf="liveview == true" class="container" style="margin-top: 15px;">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-sx-12">
+            <div *ngIf="(project | async)" class="current-profile">
+                <iframe (load)="uploadDone()" style="margin-left: 12px; background-image: url('/assets/images/spinner.gif'); background-repeat: no-repeat;background-position: top center;
+" [src]="(project | async)?.Url | safe" height="800" width="98%" allowfullscreen="" frameborder="0"></iframe>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="!liveview" class="row">
+    <div class="col-lg-6">
+        <div class="card card-default">
+            <div class="card-header" style="color: #333;">
+                <i class="fa fa-user fa-fw"></i> Project Details
+            </div>
+            <p style="margin: 10px; padding: 5px; font-weight: 400; color: #333;">{{(project | async)?.Description}}</p>
+        </div>
+            <div class="card card-default">
+                <div class="card-header">
+                    <i class="fa fa-graduation-cap fa-fw"></i> Skills Gained
+                </div>
+                <!-- /.card-header -->
+                <ul class="list-group">
+                    <canvas *ngIf="chart && chartlabel" baseChart height="500px" [datasets]="radarChartData" [labels]="radarChartLabels" [chartType]="radarChartType" [colors]="lineChartColors" (chartHover)="chartHovered($event)">
+                    </canvas>
+                </ul>
+
+                <!-- /.card-body -->
+            </div>
+
+        <!-- /.card -->
+
+    </div>
+    <div  class="card card-default" style="margin-top: 0px;">
+        <div class="card-header">
+            <i class="fa fa-clock-o fa-fw"></i> Project Images
+        </div>
+        <div class="card-image" *ngIf="(project | async)?.ImgPreview">
+            <img class=""  [src]="(project | async)?.ImgPreview"/>
+        </div>
+        <div *ngIf="!(project | async)?.ImgPreview" style="height: 100%; width: 100%;">
+            <img class="" style="height: 65%; width: 80%; margin-left: 10%; margin-right: auto;" src="/assets/images/no-image.png"/>
+            <div *ngIf="liveview == false">
+                <h5 style="text-align: center;color: grey">Please view the live preview</h5>
+            </div>
+
+        </div>
+        <!-- /.card-header -->
+        <!-- /.card-body -->
+    </div>
+
+
+</div>
+<div *ngIf="!liveview" class="card card-default" style="margin-top: 15px;">
+    <div class="card-footer" >
+        <button *ngIf="(project | async)?.$key != 0" class="description" style="margin-top: 10px; " (click)="previous()" type="button " class="btn btn-sm btn-danger pull-left">Previous Project</button>
+        <button *ngIf="(project | async)?.$key == 0" class="description" style="margin-top: 10px; "  type="button " class="btn btn-sm btn-danger pull-left disabled">Previous Project</button>
+        <button *ngIf="(project | async)?.$key < max" class="description" style="margin-top: 10px; " (click)="next()" type="button " class="btn btn-sm btn-primary pull-right">Next Project</button>
+        <button *ngIf="(project | async)?.$key >= max" class="description" style="margin-top: 10px; " (click)="next()" type="button " class="btn btn-sm btn-primary pull-right disabled">Next Project</button>
+    </div>
+</div>

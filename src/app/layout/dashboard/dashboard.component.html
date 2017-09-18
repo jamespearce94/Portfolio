@@ -1,0 +1,53 @@
+<div [@routerTransition]>
+
+    <div class="container-full">
+        <div class="col-md-12">
+            <ngb-carousel>
+                <ng-template ngbSlide *ngFor="let slider of sliders">
+                    <img class="img-fluid mx-auto d-block" [src]="slider.imagePath" alt="Random first slide" width="100%">
+                    <div class="carousel-caption">
+                        <h3>{{slider.label}}</h3>
+                    </div>
+                </ng-template>
+            </ngb-carousel>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-default">
+                <div class="card-header" style="color: #333;">
+                    <i class="fa fa-user fa-fw"></i> About Me
+                </div>
+                <p style="margin: 10px; padding: 5px; font-weight: 400; color: #333;">{{(profile | async)?.Aboutme}}</p>
+            </div>
+            <!-- /.card -->
+            <div class="card card-default" style="margin-top: 15px;">
+                <div class="card-header">
+                    <i class="fa fa-clock-o fa-fw"></i> Previous Experience
+                </div>
+                <!-- /.card-header -->
+                <app-timeline></app-timeline>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-default">
+                <div class="card-header">
+                    <i class="fa fa-graduation-cap fa-fw"></i> Qualifications
+                </div>
+                <!-- /.card-header -->
+                <ul class="list-group">
+                    <li *ngFor="let qualification of (profile | async)?.Qualifications" class="list-group-item">{{qualification}}</li>
+                </ul>
+
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <app-chat></app-chat>
+            <!-- /.card .chat-card -->
+        </div>
+    </div>
+
+</div>
